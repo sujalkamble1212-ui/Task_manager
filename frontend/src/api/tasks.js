@@ -1,15 +1,10 @@
 import axios from 'axios';
 
-// Support both Vite (import.meta.env.VITE_API_URL) and CRA (process.env.REACT_APP_BACKEND_URL)
-const rawBaseUrl = 
-  (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL) ||
-  (typeof process !== 'undefined' && process.env && process.env.REACT_APP_BACKEND_URL) ||
-  'http://localhost:5000/api/tasks';
-
-// Ensure base URL points to /api/tasks
-const API_URL = rawBaseUrl.endsWith('/api/tasks') 
-  ? rawBaseUrl 
-  : `${rawBaseUrl.replace(/\/$/, '')}/api/tasks`;
+// In production on Vercel, frontend and API share the same domain.
+// Use a relative URL (/api/tasks) so it works automatically.
+// In local dev, fall back to the VITE_API_URL pointing to localhost:5000.
+const API_URL =
+  import.meta.env.VITE_API_URL || '/api/tasks';
 
 console.log('[API Config] Connected to backend endpoint:', API_URL);
 
